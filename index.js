@@ -1,11 +1,47 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const app = express();
-const PORT = 3000;
+const PORT = 3002;
 const axios = require('axios');
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
+const getEndpoints = (app) => {
+  const endpoints = [];
+
+  app._router.stack.forEach((middleware) => {
+    if (middleware.route) {
+      endpoints.push(middleware.route.path);
+    } else if (middleware.name === 'router') {
+      middleware.handle.stack.forEach((handler) => {
+        endpoints.push(handler.route.path);
+      });
+    }
+  });
+
+  return endpoints;
+};
+app.get('/', async (req, res) => {
+  const endpoints = getEndpoints(app);
+  const buttons = endpoints
+    .map((endpoint) => `<button onclick="window.location.href='${endpoint}'">${endpoint}</button>`)
+    .join('');
+  const alphaApiButton = `<button onclick="window.location.href='https://api.alpha-md.rf.gd/'">Check out the home page here</button>`;
+
+  const html = `
+    <h1>Welcome to alphas  API!</h1>
+    <p>API Endpoints:</p>
+    ${buttons}
+    <br />
+    ${alphaApiButton}
+  `;
+
+  res.send(html);
+});
+
+
+
+
 app.get('/getRandomNeko', async (req, res) => {
     try {
         const apiResponse = await fetch('https://api.nekosapi.com/v3/images/random');
