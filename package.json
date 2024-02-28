@@ -11,7 +11,7 @@
     "pm2": "^5.1.2"
   },
   "scripts": {
-    "start": "pm2 start index.js --deep-monitoring --attach --name apialpha",
+    "start": "node index.js",
     "stop": "pm2 stop apialpha"
   }
 }
