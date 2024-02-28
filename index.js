@@ -98,6 +98,58 @@ app.get('/ai/herc', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+const nsfwApiUrl = 'https://nsfwhub.onrender.com/nsfw?type=';
+const categories = [
+    'ass',
+    'sixtynine',
+    'pussy',
+    'dick',
+    'anal',
+    'boobs',
+    'bdsm',
+    'black',
+    'easter',
+    'bottomless',
+    'blowjub',
+    'collared',
+    'cum',
+    'cumsluts',
+    'dp',
+    'dom',
+    'extreme',
+    'feet',
+    'finger',
+    'fuck',
+    'futa',
+    'gay',
+    'gif',
+    'group',
+    'hentai',
+    'kiss',
+    'lesbian',
+    'lick',
+    'pegged',
+    'phgif',
+    'puffies',
+    'real',
+    'suck',
+    'tattoo',
+    'tiny',
+    'toys',
+    'xmas'
+  ];
+  categories.forEach(category => {
+    app.get(`/nsfw/${category}`, async (req, res) => {
+      try {
+        const response = await axios.get(`${nsfwApiUrl}${category}`);
+        res.json({ result: response.data });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
+  }); 
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
